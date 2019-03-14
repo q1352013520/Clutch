@@ -31,16 +31,27 @@ Clutch may encounter `Segmentation Fault: 11` when dumping apps with a large num
 ```sh
 killall Xcode
 cp /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/SDKSettings.plist ~/
-/usr/libexec/PlistBuddy -c "Set :DefaultProperties:CODE_SIGNING_REQUIRED NO" /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/SDKSettings.plist
-/usr/libexec/PlistBuddy -c "Set :DefaultProperties:AD_HOC_CODE_SIGNING_ALLOWED YES" /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/SDKSettings.plist
+sudo /usr/libexec/PlistBuddy -c "Set :DefaultProperties:CODE_SIGNING_REQUIRED NO" /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/SDKSettings.plist
+sudo /usr/libexec/PlistBuddy -c "Set :DefaultProperties:AD_HOC_CODE_SIGNING_ALLOWED YES" /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/SDKSettings.plist
 ```
 
 Note that if you update Xcode you may need to run these commands again.
 
 ## Compiling
 
+### Xcode
+
 ```sh
 xcodebuild clean build
+```
+
+### CMake
+
+```sh
+mkdir build
+cd build
+cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE=../cmake/iphoneos.toolchain.cmake ..
+make -j$(sysctl -n hw.logicalcpu)
 ```
 
 ## Installation
@@ -58,6 +69,12 @@ scp -P 2222 ./build/Clutch root@localhost:/usr/bin/Clutch
 ```
 
 When you SSH into your device, run `Clutch`.
+
+If you are using the [unc0ver jailbreak](https://www.theiphonewiki.com/wiki/Unc0ver), you may need to run the following:
+
+```sh
+inject /usr/bin/Clutch
+```
 
 # Licenses
 
@@ -86,6 +103,8 @@ Clutch would not be what it is without these people:
 * [DoubleDoughnut](https://github.com/DoubleDoughnut)
 * [iD70my](https://github.com/iD70my)
 * [OdNairy](https://github.com/OdNairy)
+* [palmerc](https://github.com/palmerc)
+* [jack980517](https://github.com/jack980517)
 
 # Copyright
 
